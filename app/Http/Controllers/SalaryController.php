@@ -22,18 +22,24 @@ class SalaryController extends Controller
         return view('salary.create', compact('employees'));
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'amount' => 'required',
-            'payment_date' => 'required',
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'employee_id' => 'required|integer|exists:employees,id', // make sure the employee_id exists in the employees table
+        'amount' => 'required|numeric',
+        'payment_date' => 'required|date',
+    ]);
 
-        $salary = new Salary($request->only(['amount', 'payment_date']));
-        $salary->save();
+    $data = [
+        'employee_id' => $request->input('employee_id'),
+        'amount' => $request->input('amount'),
+        'payment_date' => $request->input('payment_date'),
+    ];
+    // print_r($data);
+    $salary = Salary::create($data);
 
-        return redirect()->route('salaries.index')->with('success', 'Salary created successfully');
-    }
+    return redirect()->route('salaries.index')->with('success', 'Salary added successfully.');
+}
 
     public function edit(Salary $salary)
     {

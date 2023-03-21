@@ -9,8 +9,14 @@ class Salary extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'amount',
-        'payment_date',
-    ];
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
+
+     protected $fillable = [
+         'employee_id',
+         'amount',
+         'payment_date',
+     ];
 }
